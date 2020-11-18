@@ -1,7 +1,4 @@
-import sys
-import time
-import socket
-import mechanize
+import sys, os, time, socket, optparse, mechanize
 from colorama import Fore, init
 from termcolor import colored
 # init color print
@@ -20,7 +17,7 @@ class App:
         'Bot Whatsapp (Coming Soon)',
         'Custom Bruteforce (Coming Soon)'
     ]
-    full = 50
+    full = 60
     hostname = socket.gethostname()
     # init
     def __init__(self):
@@ -28,19 +25,19 @@ class App:
             sys.exit()
         else:
             print('#' * self.full)
-            print('##!!                                          !!##')
-            print(f'##!!       {colored("Hacking and Bot Application", "white", "on_red", attrs=["bold"])}        !!##')
-            print('##!!                                          !!##')
-            print('##!!              $$$$$$$$$$$$$               !!##')
-            print('##!!            $$$$$$$$$$$$$$$$$             !!##')
-            print('##!!              |           |               !!##')
-            print('##!!             {| [0]   [0] |}              !!##')
-            print('##!!              |    ___    |               !!##')
-            print('##!!              |    !!!    |               !!##')
-            print('##!!              |___________|               !!##')
-            print('##!!                                          !!##')
-            print(f'##!!          {colored("Dev by Ferdiansyah0611", "white", "on_red", attrs=["bold"])}          !!##')
-            print('##!!                                          !!##')
+            print('##!!                                                    !!##')
+            print(f'##!!            {colored("Hacking and Bot Application", "white", "on_red", attrs=["bold"])}             !!##')
+            print('##!!                                                    !!##')
+            print('##!!                   $$$$$$$$$$$$$                    !!##')
+            print('##!!                 $$$$$$$$$$$$$$$$$                  !!##')
+            print('##!!                   |           |                    !!##')
+            print('##!!                  {| [0]   [0] |}                   !!##')
+            print('##!!                   |    ___    |                    !!##')
+            print('##!!                   |    !!!    |                    !!##')
+            print('##!!                   |___________|                    !!##')
+            print('##!!                                                    !!##')
+            print(f'##!!               {colored("Dev by Ferdiansyah0611", "white", "on_red", attrs=["bold"])}               !!##')
+            print('##!!                                                    !!##')
             print('#' * self.full)
             print(colored('checking python version...', 'green'))
             time.sleep(1)
@@ -63,7 +60,7 @@ class App:
             i = 0
             for listsocial in self.socialmedia:
                 i += 1
-                print(f"| {str(i)}. {listsocial}")
+                print(f"| [{str(i)}] {listsocial}")
             print('')
             print('|For Helping: ')
             print('| -h : Helping')
@@ -108,4 +105,48 @@ class App:
         except Exception as e:
             print(f"Erorr : {e}")
 # call app
-App().start()
+# App().start()
+def table(n, dest_cheak): 
+    for i in range(1,11): 
+        tab = i*n 
+          
+        if dest_cheak: 
+            print(tab) 
+              
+    return tab 
+  
+# define a function for  
+# adding options 
+def Main(): 
+    # create OptionParser object 
+    parser = optparse.OptionParser("usage: %prog [options] arg")
+    parser.add_option('-e', action="store", default=False, type='string', dest='email', help='email target of bruteforce')
+    parser.add_option('-c', action="store", default=False, type='string', dest='choose', help='choose type target of bruteforce')
+    parser.add_option('-t', action="store", default=False, type='string', dest='type', help='choose type of bruteforce')
+    parser.add_option('-v', action='store_false', default=False, dest='version', help='check version library')
+    parser.add_option('-p', action='store', default=False, dest='password', help='if choose manual you must be fillable password')
+    group = optparse.OptionGroup(parser, "Example", "python app.py -e admin@server.domain -c 1 -t a")
+    parser.add_option_group(group)
+    options, args = parser.parse_args()
+    if options.version != False:
+        print('Version ', options.version)
+    if options.email != False and options.choose != False and options.type !=  False:
+        os.system('cls')
+        # Facebook Bruteforce
+        if options.choose == '1':
+            # auto bruteforce
+            if options.type == 'a':
+                App()
+                from src.facebook import Facebook
+                Facebook(options.email, 'auto').run()
+            # manual bruteforce
+            if options.type == 'm':
+                if options.password != False:
+                    App()
+                    from src.facebook import Facebook
+                    Facebook(options.email, 'manual', options.password).run()
+
+# Driver code 
+if __name__ == '__main__': 
+    # function calling 
+    Main() 
