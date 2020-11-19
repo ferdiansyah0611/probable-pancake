@@ -7,13 +7,12 @@ git clone https://github.com/ferdiansyah0611/bruteforce-python
 #### Usage
 ```cli
 cd bruteforce-python
-python app.py
-# example bruteforce facebook
-# 1 admin@server.com -a or
-# 1 admin@server.com -m password?
-# -------------------------------
-# for helping
-# 1 -h
+# Show Help
+python app.py --h
+# Bruteforce Facebook
+python app.py -e admin@server.com -c 1 -t a
+# or
+python app.py -e admin@server.com -c 1 -t m -p password12345
 ```
 #### Requirement Module
 - Python v3
@@ -22,16 +21,7 @@ python app.py
 - termcolor
 - requests
 - socket
-- mechanize
 #### List Web Bruteforce
 - Facebook
-- Twitter
-- Instagram
-- Yahoo
-- Custom Bruteforce
-#### List Bot
-- Whatsapp
-#### List Spam Chat
-- Whatsapp
 #### License
 MIT LICENSE

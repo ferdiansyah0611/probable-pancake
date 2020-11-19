@@ -1,9 +1,6 @@
-import requests
-import sys
-import time
-import random
+import requests, sys, time, random
 from bs4 import BeautifulSoup
-from colorama import Fore, init
+from colorama import init
 from termcolor import colored
 # init color print
 init()
