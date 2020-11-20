@@ -47,6 +47,7 @@ class App:
 def Main(): 
     parser = optparse.OptionParser("usage: %prog [options] arg")
     parser.add_option('-e', action="store", default=False, type='string', dest='email', help='email target of bruteforce')
+    parser.add_option('-P', action="store", default=False, type='float', dest='phone', help='phone target of bruteforce')
     parser.add_option('-c', action="store", default=False, type='float', dest='choose', help='choose type target of bruteforce')
     parser.add_option('-t', action="store", default=False, type='string', dest='type', help='choose type of bruteforce')
     parser.add_option('-v', action='store_false', default=False, dest='version', help='check version library')
@@ -56,21 +57,31 @@ def Main():
     (options, args) = parser.parse_args()
     if options.version != False:
         print('Version ', options.version)
-    if options.email != False and options.choose != False and options.type !=  False:
+    if options.email != False or options.phone != False and options.choose != False and options.type !=  False:
         os.system('cls')
+        if os.system('cls') == 0:
+            os.system('cls')
+        if os.system('clear') == 0:
+            os.system('clear')
         # Facebook Bruteforce
         if options.choose == 1:
             # auto bruteforce
             if options.type == 'a':
                 App()
                 from src.facebook import Facebook
-                Facebook(options.email, 'auto').run()
+                if options.email != False:
+                    Facebook(options.email, 'auto').run()
+                if options.phone != False:
+                    Facebook(options.phone, 'auto').run()
             # manual bruteforce
             if options.type == 'm':
                 if options.password != False:
                     App()
                     from src.facebook import Facebook
-                    Facebook(options.email, 'manual', options.password).run()
+                    if options.email != False:
+                        Facebook(options.email, 'manual', options.password).run()
+                    if options.phone != False:
+                        Facebook(options.phone, 'manual', options.password).run()
         if options.choose > 1 and options.choose <= 7:
             print(colored("Message : Sorry This Feature Is Coming Soon", "white", "on_cyan", attrs=["bold"]))
 
