@@ -3,6 +3,10 @@ from colorama import init
 from termcolor import colored
 # init color print
 init()
+
+def logtime():
+    now = time.localtime(time.time())
+    return colored("[{hours}:{minutes}]".format(hours = now.tm_hour, minutes = now.tm_min), 'green') + ':'
 # start app
 class App:
     # attribute
@@ -14,34 +18,32 @@ class App:
         if sys.version_info[0] != 3:
             sys.exit()
         else:
-            print('#' * self.full)
-            print('##!!                                                    !!##')
-            print(f'##!!            {colored("Hacking and Bot Application", "white", "on_red", attrs=["bold"])}             !!##')
-            print('##!!                                                    !!##')
-            print('##!!                   $$$$$$$$$$$$$                    !!##')
-            print('##!!                 $$$$$$$$$$$$$$$$$                  !!##')
-            print('##!!                   |           |                    !!##')
-            print('##!!                  {| [0]   [0] |}                   !!##')
-            print('##!!                   |    ___    |                    !!##')
-            print('##!!                   |    !!!    |                    !!##')
-            print('##!!                   |___________|                    !!##')
-            print('##!!                                                    !!##')
-            print(f'##!!               {colored("Dev by Ferdiansyah0611", "white", "on_red", attrs=["bold"])}               !!##')
-            print('##!!                                                    !!##')
-            print('#' * self.full)
-            print(colored('checking python version...', 'green'))
+            print(logtime(), '#' * self.full)
+            print(logtime(), '##!!                                                    !!##')
+            print(logtime(), f'##!!            {colored("Hacking and Bot Application", "white", "on_red", attrs=["bold"])}             !!##')
+            print(logtime(), '##!!                                                    !!##')
+            print(logtime(), '##!!                   $$$$$$$$$$$$$                    !!##')
+            print(logtime(), '##!!                 $$$$$$$$$$$$$$$$$                  !!##')
+            print(logtime(), '##!!                   |           |                    !!##')
+            print(logtime(), '##!!                  {| [0]   [0] |}                   !!##')
+            print(logtime(), '##!!                   |    ___    |                    !!##')
+            print(logtime(), '##!!                   |    !!!    |                    !!##')
+            print(logtime(), '##!!                   |___________|                    !!##')
+            print(logtime(), '##!!                                                    !!##')
+            print(logtime(), f'##!!               {colored("Dev by Ferdiansyah0611", "white", "on_red", attrs=["bold"])}               !!##')
+            print(logtime(), '##!!                                                    !!##')
+            print(logtime(), '#' * self.full)
+            print(logtime(), 'checking python version...')
             time.sleep(0.4)
-            print(colored('checking application version...', 'green'))
+            print(logtime(), 'checking application version...')
             time.sleep(0.4)
-            print(colored('checking url...', 'green'))
+            print(logtime(), 'checking url...')
             time.sleep(0.4)
-            print(colored('checking ip address...', 'green'))
+            print(logtime(), 'checking ip address...')
             ip = socket.gethostbyname(self.hostname)
             time.sleep(0.4)
-            print('-' * self.full)
-            print('Enjoy Your Hacking')
-            print(f"IP Address: {ip}")
-            print('')
+            print(logtime(), 'Enjoy Your Hacking')
+            print(logtime(), f"IP Address: {ip}")
             time.sleep(0.4)
 
 def Main(): 
