@@ -1,32 +1,23 @@
-## Bruteforce and Bot Social Media
-Open source of bruteforce web populars and bot.
+## Hacking Tools Open Source
+Free tools for hacking
+### Feature
+- Request API
+- Facebook Bruteforce
+- DDOS Server
+- Check IP Server
 #### Installation
-```cli
+```bash
 git clone https://github.com/ferdiansyah0611/bruteforce-python
+cd bruteforce-python
+pip install -r pip.txt
 ```
 #### Usage
-```cli
-cd bruteforce-python
-# Show Help (Include Argument)
-python app.py --h
-# Bruteforce Facebook
-# with email
-python app.py -e admin@server.com -c 1 -t a
-# or
-python app.py -e admin@server.com -c 1 -t m -p password12345
-# with phone
-python app.py -P 09999999999 -c 1 -t a
-# or
-python app.py -P 09999999999 -c 1 -t m -p password12345
+
+```bash
+python app.py
 ```
-#### Requirement Module
-- Python v3
-- bs4
-- colorama
-- termcolor
-- requests
-- socket
-#### List Web Bruteforce
-- Facebook
-#### License
-MIT LICENSE
+#### Help
+```bash
+python app.py -h
+```
+#### [Donate](https://commerce.coinbase.com/checkout/e9bc198a-71b3-498b-88bf-b1394c207e70)
