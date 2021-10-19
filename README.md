@@ -5,6 +5,7 @@ Free tools for hacking
 - Facebook Bruteforce
 - DDOS Server
 - Check IP Server
+- Zip Bruteforce
 #### Installation
 ```bash
 git clone https://github.com/ferdiansyah0611/bruteforce-python
