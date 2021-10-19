@@ -81,9 +81,9 @@ def Main():
 					App()
 					from src.facebook import Facebook
 					if options.email != False:
-						Facebook(options.email, 'manual', options.password)
+						Facebook(options.email, 'manual', password = options.password)
 					if options.phone != False:
-						Facebook(options.phone, 'manual', options.password)
+						Facebook(options.phone, 'manual', password = options.password)
 		if options.choose > 1 and options.choose <= 7:
 			print(colored("Message : Sorry This Feature Is Coming Soon", "white", "on_cyan", attrs=["bold"]))
 	else:

@@ -11,12 +11,13 @@ def commandline():
 		"DDOS Server",
 		"Check IP Server",
 		"Facebook Bruteforce",
+		"Zip Bruteforce"
 	]
 	i = 0
 	print(logtime(), colored("List Command Line Application", "blue"))
 
 	for d in feature:
-		print(logtime(), '({}) {}'.format(i, d))
+		print(logtime(), '[{}] {}'.format(i, d))
 		i += 1
 
 	choose = input(logtime(False) + ' ')
@@ -33,7 +34,7 @@ def commandline():
 		DDOS()
 
 	if choose == "3":
-		host = input(logtime(False) + ' hostname=')
+		host = input(logtime(False) + ' hostname = ')
 		ip = socket.gethostbyname(host)
 		print(logtime(), ip)
 		tryagain = input(logtime(False) + ' write n to stop commandline or anykey to try again: ')
@@ -43,13 +44,18 @@ def commandline():
 
 	if choose == "4":
 		from src.facebook import Facebook
-		emailorphone = input(logtime(False) + ' email/phone=')
-		execute = str(input(logtime(False) + ' type("auto", "manual")=')).lower()
+		emailorphone = input(logtime(False) + ' email/phone = ')
+		execute = str(input(logtime(False) + ' type(auto/manual) = ')).lower()
 		if execute == 'manual':
 			pw = input(logtime(False) + ' password=')
-			Facebook(emailorphone, execute, pw)
+			Facebook(emailorphone, execute, password=pw)
 		else:
-			Facebook(emailorphone, execute)
+			customfile = str(input(logtime(False) + ' custom wordlist *default(passwords.txt) = '))
+			Facebook(emailorphone, execute, customfile = customfile)
+
+	if choose == "5":
+		from src.feature.zipper import ZIP
+		ZIP(commandline = commandline, colored = colored)
 
 	else:
 		exited()

