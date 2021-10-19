@@ -5,7 +5,10 @@ Free tools for hacking
 - Facebook Bruteforce
 - DDOS Server
 - Check IP Server
+<<<<<<< HEAD
 - Check Port Server
+=======
+>>>>>>> 397e0808be75cfddc4d6901c3a3fe2434e2ca987
 - Zip Bruteforce
 #### Installation
 ```bash
@@ -18,5 +21,4 @@ pip install -r pip.txt
 ```bash
 python app.py
 ```
-
 #### [Donate](https://commerce.coinbase.com/checkout/e9bc198a-71b3-498b-88bf-b1394c207e70)
