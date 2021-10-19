@@ -44,8 +44,6 @@ class App:
 			time.sleep(0.4)
 			print(logtime(), 'checking application version...')
 			time.sleep(0.4)
-			print(logtime(), 'checking url...')
-			time.sleep(0.4)
 			print(logtime(), 'checking ip address...')
 			ip = socket.gethostbyname(self.hostname)
 			time.sleep(0.4)

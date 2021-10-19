@@ -1,45 +1,38 @@
 from app import logtime, colored, socket, sys
 
+def exited():
+	print(logtime(), colored("Exit The Command. Bye Hacker", "red"))
+	sys.exit()
+
 def commandline():
 	feature = [
 		"Exit Command",
 		"Request API",
-		"Facebook Bruteforce",
 		"DDOS Server",
-		"Check IP Server"
+		"Check IP Server",
+		"Facebook Bruteforce",
 	]
 	i = 0
 	print(logtime(), colored("List Command Line Application", "blue"))
 
 	for d in feature:
-		print(logtime(), '{}. {}'.format(i, d))
+		print(logtime(), '({}) {}'.format(i, d))
 		i += 1
 
 	choose = input(logtime(False) + ' ')
 
 	if choose == "0":
-		print(logtime(), colored("Exit The Command. Bye Hacker", "red"))
-		sys.exit()
+		exited()
 
 	if choose == "1":
 		from src.feature.request import request
 		request()
 
 	if choose == "2":
-		from src.facebook import Facebook
-		emailorphone = input(logtime(False) + ' email/phone=')
-		execute = input(logtime(False) + ' type("auto", "manual")=').lower()
-		if execute == 'manual':
-			pw = input(logtime(False) + ' password=')
-			Facebook(emailorphone, execute, pw)
-		else:
-			Facebook(emailorphone, execute)
-
-	if choose == "3":
 		from src.feature.ddos import DDOS
 		DDOS()
 
-	if choose == "4":
+	if choose == "3":
 		host = input(logtime(False) + ' hostname=')
 		ip = socket.gethostbyname(host)
 		print(logtime(), ip)
@@ -47,3 +40,16 @@ def commandline():
 		if tryagain == 'n': sys.exit()
 		else:
 			commandline()
+
+	if choose == "4":
+		from src.facebook import Facebook
+		emailorphone = input(logtime(False) + ' email/phone=')
+		execute = str(input(logtime(False) + ' type("auto", "manual")=')).lower()
+		if execute == 'manual':
+			pw = input(logtime(False) + ' password=')
+			Facebook(emailorphone, execute, pw)
+		else:
+			Facebook(emailorphone, execute)
+
+	else:
+		exited()
