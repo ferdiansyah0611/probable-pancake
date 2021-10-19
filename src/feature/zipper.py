@@ -1,8 +1,7 @@
 from tqdm import tqdm
 import zipfile
-from app import logtime
 
-def ZIP(commandline, colored):
+def ZIP(success, colored, logtime):
 	name = str(input(logtime(False) + ' zip file = '))
 	txt = str(input(logtime(False) + ' txt file = '))
 	try:
@@ -10,7 +9,7 @@ def ZIP(commandline, colored):
 		count_pass = len(list(open(txt, "rb")))
 	except:
 		print(logtime(), colored('File zip/txt Not Founds. Check The File And Try Again', 'red'))
-		commandline()
+		success()
 	finally:
 		print(logtime(), "Total Password:", count_pass)
 		with open(txt, "rb") as wordlist:
@@ -22,7 +21,6 @@ def ZIP(commandline, colored):
 				else:
 					print("\a")
 					print(logtime(), "Password Found:", word.decode().strip())
-					commandline()
-		print("\a")
+					success()
 		print(logtime(), "Password not found in the wordlist, try another one")
-		commandline()
+		success()

@@ -1,8 +1,6 @@
 import requests, re
-from app import logtime, colored
-from src.commandline import commandline
 
-def request():
+def request(success, logtime, colored):
 	url = input(logtime(False) + ' url = ') + "\r"
 	if re.search("https://|http://", r"{}".format(url)) is not None:
 		method = str(input(logtime(False) + ' method("get", "post") = ')).lower()
@@ -19,8 +17,8 @@ def request():
 		except:
 			print(logtime(), colored("Could Not Resolve", "red"))
 
-		commandline()
+		success()
 
 	else:
 		print(logtime(), colored('URL MUST BE INCLUDE HTTP OR HTTPS', 'red'))
-		request()
+		request(success, logtime, colored)

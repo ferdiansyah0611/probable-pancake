@@ -4,6 +4,12 @@ def exited():
 	print(logtime(), colored("Exit The Command. Bye Hacker", "red"))
 	sys.exit()
 
+def success():
+	tryagain = input(logtime(False) + ' write n to stop commandline or anykey to try again: ')
+	if tryagain == 'n': sys.exit()
+	else:
+		commandline()
+
 def commandline():
 	feature = [
 		"Exit Command",
@@ -11,7 +17,8 @@ def commandline():
 		"DDOS Server",
 		"Check IP Server",
 		"Facebook Bruteforce",
-		"Zip Bruteforce"
+		"Zip Bruteforce",
+		"Check Port Server"
 	]
 	i = 0
 	print(logtime(), colored("List Command Line Application", "blue"))
@@ -27,7 +34,7 @@ def commandline():
 
 	if choose == "1":
 		from src.feature.request import request
-		request()
+		request(success = success, logtime = logtime, colored = colored)
 
 	if choose == "2":
 		from src.feature.ddos import DDOS
@@ -37,10 +44,7 @@ def commandline():
 		host = input(logtime(False) + ' hostname = ')
 		ip = socket.gethostbyname(host)
 		print(logtime(), ip)
-		tryagain = input(logtime(False) + ' write n to stop commandline or anykey to try again: ')
-		if tryagain == 'n': sys.exit()
-		else:
-			commandline()
+		success()
 
 	if choose == "4":
 		from src.facebook import Facebook
@@ -55,7 +59,11 @@ def commandline():
 
 	if choose == "5":
 		from src.feature.zipper import ZIP
-		ZIP(commandline = commandline, colored = colored)
+		ZIP(success = success, colored = colored, logtime = logtime)
+
+	if choose == "6":
+		from src.feature.checkport import Checkport
+		Checkport(colored = colored, logtime = logtime, success = success)
 
 	else:
 		exited()
