@@ -10,51 +10,51 @@ def logtime(withcolor = True):
 		return colored("[{hours}:{minutes}]".format(hours = now.tm_hour, minutes = now.tm_min), 'green') + ':'
 	else:
 		return "[{hours}:{minutes}]".format(hours = now.tm_hour, minutes = now.tm_min) + ':'
-# start app
-class App:
+
+class Application:
 	# attribute
 	version = 1
 	full = 60
 	hostname = socket.gethostname()
 	# init
 	def __init__(self):
-		if sys.version_info[0] != 3:
+		if os.system('cls') == 0:
+			os.system('cls')
+		if os.system('clear') == 0:
+			os.system('clear')
+		print(logtime(), '#' * self.full)
+		print(logtime(), '##!!                                                    !!##')
+		print(logtime(), f'##!!             {colored("Hacking Tools Application", "white", "on_red", attrs=["bold"])}              !!##')
+		print(logtime(), '##!!                                                    !!##')
+		print(logtime(), '##!!                   $$$$$$$$$$$$$                    !!##')
+		print(logtime(), '##!!                 $$$$$$$$$$$$$$$$$                  !!##')
+		print(logtime(), '##!!                   |           |                    !!##')
+		print(logtime(), '##!!                  {| [0]   [0] |}                   !!##')
+		print(logtime(), '##!!                   |    ___    |                    !!##')
+		print(logtime(), '##!!                   |    !!!    |                    !!##')
+		print(logtime(), '##!!                   |___________|                    !!##')
+		print(logtime(), '##!!                                                    !!##')
+		print(logtime(), f'##!!               {colored("Dev by Ferdiansyah0611", "white", "on_red", attrs=["bold"])}               !!##')
+		print(logtime(), '##!!                                                    !!##')
+		print(logtime(), '#' * self.full)
+		print(logtime(), 'checking python version...')
+		if sys.version_info[0] < 3:
+			print(logtime(), colored('python must be v3', 'red'))
 			sys.exit()
-		else:
-			if os.system('cls') == 0:
-				os.system('cls')
-			if os.system('clear') == 0:
-				os.system('clear')
-			print(logtime(), '#' * self.full)
-			print(logtime(), '##!!                                                    !!##')
-			print(logtime(), f'##!!             {colored("Hacking Tools Application", "white", "on_red", attrs=["bold"])}              !!##')
-			print(logtime(), '##!!                                                    !!##')
-			print(logtime(), '##!!                   $$$$$$$$$$$$$                    !!##')
-			print(logtime(), '##!!                 $$$$$$$$$$$$$$$$$                  !!##')
-			print(logtime(), '##!!                   |           |                    !!##')
-			print(logtime(), '##!!                  {| [0]   [0] |}                   !!##')
-			print(logtime(), '##!!                   |    ___    |                    !!##')
-			print(logtime(), '##!!                   |    !!!    |                    !!##')
-			print(logtime(), '##!!                   |___________|                    !!##')
-			print(logtime(), '##!!                                                    !!##')
-			print(logtime(), f'##!!               {colored("Dev by Ferdiansyah0611", "white", "on_red", attrs=["bold"])}               !!##')
-			print(logtime(), '##!!                                                    !!##')
-			print(logtime(), '#' * self.full)
-			print(logtime(), 'checking python version...')
-			time.sleep(0.4)
-			print(logtime(), 'checking application version...')
-			time.sleep(0.4)
-			print(logtime(), 'checking ip address...')
-			ip = socket.gethostbyname(self.hostname)
-			time.sleep(0.4)
-			print(logtime(), 'Enjoy Your Hacking')
-			print(logtime(), f"IP Address: {ip}")
-			time.sleep(0.4)
+		time.sleep(0.2)
+		print(logtime(), 'checking application version...')
+		time.sleep(0.2)
+		print(logtime(), 'checking ip address...')
+		ip = socket.gethostbyname(self.hostname)
+		time.sleep(0.2)
+		print(logtime(), f"IP Address: {ip}")
+		print(logtime(), 'Enjoy Your Hacking')
+		time.sleep(0.2)
+		self.run()
 
-def Main():
-	App()
-	from src.commandline import commandline
-	commandline()
+	def run(self):
+		from src.commandline import commandline
+		commandline()
 
 if __name__ == '__main__': 
-	Main() 
+	Application() 

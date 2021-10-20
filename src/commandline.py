@@ -48,14 +48,14 @@ def commandline():
 
 	if choose == "4":
 		from src.facebook import Facebook
-		emailorphone = input(logtime(False) + ' email/phone = ')
+		emailorphone = str(input(logtime(False) + ' email = ')).lower()
 		execute = str(input(logtime(False) + ' type(auto/manual) = ')).lower()
 		if execute == 'manual':
 			pw = input(logtime(False) + ' password=')
-			Facebook(emailorphone, execute, password=pw)
+			Facebook(emailorphone, execute, colored = colored, password=pw)
 		else:
 			customfile = str(input(logtime(False) + ' custom wordlist *default(passwords.txt) = '))
-			Facebook(emailorphone, execute, customfile = customfile)
+			Facebook(emailorphone, execute, customfile = customfile, colored = colored)
 
 	if choose == "5":
 		from src.feature.zipper import ZIP

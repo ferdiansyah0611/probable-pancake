@@ -1,8 +1,8 @@
 import requests, re
 
 def request(success, logtime, colored):
-	url = input(logtime(False) + ' url = ') + "\r"
-	if re.search("https://|http://", r"{}".format(url)) is not None:
+	url = input(logtime(False) + ' url = ')
+	if re.search("https://|http://", r"{}".format(url)) is not None and re.search("/$", r"{}".format(url)) is not None:
 		method = str(input(logtime(False) + ' method("get", "post") = ')).lower()
 		try:
 			if method == 'post':
@@ -20,5 +20,5 @@ def request(success, logtime, colored):
 		success()
 
 	else:
-		print(logtime(), colored('URL MUST BE INCLUDE HTTP OR HTTPS', 'red'))
+		print(logtime(), colored('URL MUST BE INCLUDE HTTP OR HTTPS, END WITH /', 'red'))
 		request(success, logtime, colored)

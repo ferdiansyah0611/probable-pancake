@@ -7,8 +7,6 @@ Free tools for hacking
 - Check IP Server
 <<<<<<< HEAD
 - Check Port Server
-=======
->>>>>>> 397e0808be75cfddc4d6901c3a3fe2434e2ca987
 - Zip Bruteforce
 #### Installation
 ```bash
