@@ -25,4 +25,4 @@ class request(Application):
 
 		else:
 			print(super().logtime(), super().colored('URL MUST BE INCLUDE HTTP OR HTTPS, END WITH /', 'red'))
-			request(Application)
+			request()
