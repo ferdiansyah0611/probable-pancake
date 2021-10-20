@@ -1,24 +1,26 @@
 import requests, re
+from app import Application
 
-def request(success, logtime, colored):
-	url = input(logtime(False) + ' url = ')
-	if re.search("https://|http://", r"{}".format(url)) is not None and re.search("/$", r"{}".format(url)) is not None:
-		method = str(input(logtime(False) + ' method("get", "post") = ')).lower()
-		try:
-			if method == 'post':
-				data = input(logtime(False) + ' data=')
-				commit = requests.post(url, data = data)
-				print(logtime(), commit)
-				print(commit.text)
-			else:
-				commit = requests.get(url)
-				print(logtime(), commit)
-				print(commit.text)
-		except:
-			print(logtime(), colored("Could Not Resolve", "red"))
+class request(Application):
+	def __init__(self):
+		url = input(super().logtime(False) + ' url = ')
+		if re.search("https://|http://", r"{}".format(url)) is not None and re.search("/$", r"{}".format(url)) is not None:
+			method = str(input(super().logtime(False) + ' method("get", "post") = ')).lower()
+			try:
+				if method == 'post':
+					data = input(super().logtime(False) + ' data=')
+					commit = requests.post(url, data = data)
+					print(super().logtime(), commit)
+					print(commit.text)
+				else:
+					commit = requests.get(url)
+					print(super().logtime(), commit)
+					print(commit.text)
+			except:
+				print(super().logtime(), super().colored("Could Not Resolve", "red"))
 
-		success()
+			super().success()
 
-	else:
-		print(logtime(), colored('URL MUST BE INCLUDE HTTP OR HTTPS, END WITH /', 'red'))
-		request(success, logtime, colored)
+		else:
+			print(super().logtime(), super().colored('URL MUST BE INCLUDE HTTP OR HTTPS, END WITH /', 'red'))
+			request()
