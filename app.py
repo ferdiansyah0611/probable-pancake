@@ -3,7 +3,7 @@ from src.core import Core
 
 class Application(Core):
 
-	version = 1
+	version = 2
 	full = 60
 
 	def initial(self):
