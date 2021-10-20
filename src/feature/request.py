@@ -12,15 +12,17 @@ class request(Application):
 					commit = requests.post(url, data = data)
 					print(super().logtime(), commit)
 					print(commit.text)
+					self.add_request(data = {'url': url, 'last_action': 'yyy', 'response': commit.text})
 				else:
 					commit = requests.get(url)
 					print(super().logtime(), commit)
 					print(commit.text)
+					self.add_request(data = {'url': url, 'last_action': 'yyy', 'response': commit.text})
 			except:
-				print(super().logtime(), super().colored("Could Not Resolve", "red"))
+				pass
 
 			super().success()
 
 		else:
 			print(super().logtime(), super().colored('URL MUST BE INCLUDE HTTP OR HTTPS, END WITH /', 'red'))
-			request()
+			request(Application)

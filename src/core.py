@@ -1,10 +1,11 @@
 import sys, os, time, socket
 from colorama import init
 from termcolor import colored
+from src.database import Database
 
 init()
 
-class Core:
+class Core(Database):
 	hostname = socket.gethostname()
 
 	def colored(self, msg, color, bg = None, attrs = None):
@@ -55,7 +56,7 @@ class Core:
 	def check(self):
 		if sys.version_info[0] < 3:
 			print(self.logtime(), self.colored('python must be v3', 'red'))
-			sys.exit()
+			sys.end()
 
 	def ip(self):
 		return socket.gethostbyname(self.hostname)
@@ -69,11 +70,11 @@ class Core:
 
 	def exited(self):
 		print(self.logtime(), self.colored("Exit The Command. Bye Hacker", "red"))
-		sys.exit()
+		self.end()
 
 	def success(self):
 		tryagain = input(self.logtime(False) + ' write n to stop commandline or anykey to try again: ')
-		if tryagain == 'n': sys.exit()
+		if tryagain == 'n': self.exited()
 		else:
 			from src.commandline import commandline
 			commandline()

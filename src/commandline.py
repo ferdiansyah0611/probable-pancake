@@ -1,4 +1,5 @@
 from app import Application
+import socket
 
 class Action(Application):
 	def actionrequest(self):
@@ -28,6 +29,10 @@ class Action(Application):
 	def actioncheckport(self):
 		from src.feature.checkport import Checkport
 		Checkport()
+	def showrequest(self):
+		data = super().get_request()
+		for row in data:
+			print(row[0])
 
 class commandline(Application):
 	def __init__(self):
@@ -58,6 +63,7 @@ class commandline(Application):
 			{'name': '4', 'action': action.actionfacebook},
 			{'name': '5', 'action': action.actionzip},
 			{'name': '6', 'action': action.actioncheckport},
+			{'name': 'show request', 'action': action.showrequest}
 		]
 		selected = False
 		for _ in chooselist:
