@@ -20,11 +20,10 @@ def request_action(url, methods, data, header, minimize):
 
 @cli.command('ddos', short_help='ddos attack')
 @click.argument('ip')
-@click.argument('port')
-@click.option('-f', '--fixed', is_flag=True, help='fixed a port')
-def ddos_action(ip, port, fixed):
+@click.argument('port', required=False, default=0)
+def ddos_action(ip, port):
 	from src.feature.ddos import DDOS
-	DDOS(ip, int(port), fixed)
+	DDOS(ip, int(port), bool(port))
 
 @cli.command('ip:check', short_help='check ip address')
 @click.argument('hostname')
