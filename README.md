@@ -1,26 +1,37 @@
-## Hacking Tools Open Source
-Free tools for hacking
-### Feature
+# Probable Pancake
+
+Tools for hacking. CLI or GUI using kivy
+
+## Feature
+
 - Request API
 - Facebook Bruteforce
 - Zip Bruteforce
+- FTP Bruteforce
 - DDOS Server
 - Check IP Server
-- Check Port Server
-#### Installation
+- Check Open Port Server
+
+## Installation
+
 ```bash
-git clone https://github.com/ferdiansyah0611/bruteforce-python
-cd bruteforce-python
+git clone https://github.com/ferdiansyah0611/probable-pancake --depth 1
+cd probable-pancake
 pip install -r pip.txt
 ```
-#### Usage
+
+## For GUI
+
+```bash
+cd probable-pancake
+pip install kivy
+py gui.py
+```
+
+## Usage
 
 ```bash
 python app.py
 ```
-#### Help
 
-```bash
-python app.py --help
-```
-#### [Donate](https://commerce.coinbase.com/checkout/e9bc198a-71b3-498b-88bf-b1394c207e70)
+## [Donate](https://commerce.coinbase.com/checkout/e9bc198a-71b3-498b-88bf-b1394c207e70)

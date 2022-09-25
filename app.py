@@ -50,6 +50,15 @@ def zip_bruteforce_action(file, password_list):
 	from src.feature.zipper import Zipper
 	Zipper(file, password_list)
 
+@cli.command('bruteforce:ftp', short_help='ftp bruteforce')
+@click.argument('host')
+@click.argument('user')
+@click.option('--password_list', required=False, default='passwords.txt')
+@click.option('--port', required=False, default=21)
+def ftp_bruteforce(host, user, password_list, port):
+	from src.feature.ftp import main
+	main(host, user, password_list, int(port))
+
 @cli.command('ip:port', short_help='check port ip address')
 @click.argument('ip')
 def ip_port_action(ip):

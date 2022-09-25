@@ -1,257 +1,533 @@
-from tkinter import *
-from tkinter import ttk, filedialog
-import os
+import kivy
+from kivy.app import App
+from kivy.core.window import Window
+from kivy.properties import BooleanProperty
+from kivy.uix.screenmanager import ScreenManager, Screen
 
-color = {
-	'primary': '#464646',
-	'secondary': '#6F6F6F',
-	'danger': '#C62828',
-	'primary.btn': '#1565C0'
-}
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.anchorlayout import AnchorLayout
+from kivy.uix.stacklayout import StackLayout
+from kivy.uix.button import Button
+from kivy.uix.label import Label
+from kivy.uix.gridlayout import GridLayout
+from kivy.uix.textinput import TextInput
+from kivy.uix.checkbox import CheckBox
+from kivy.uix.scrollview import ScrollView
+from kivy.uix.filechooser import FileChooserListView
 
-style_btn_primary = {
-	'bg': color['primary.btn'],
-	'activebackground': color['primary.btn'],
-	'foreground': 'white',
-	'activeforeground': 'white'
-}
+from src.action import Action
 
-class Action():
-	def request(self, url, method, data = None, header = None):
-		text = f'start cmd /k py app.py request {url} {method}'
-		if data:
-			text += f' --data {data}'
-		if header:
-			text += f' --header {header}'
-		os.system(text)
-	def ip_port(self, ip):
-		os.system(f'start cmd /k py app.py ip:port {ip}')
-	def ip_check(self, ip):
-		os.system(f'start cmd /k py app.py ip:check {ip}')
-	def ddos(self, ip, port):
-		if port:
-			os.system(f'start cmd /k py app.py ddos {ip} {port}')
-		else:
-			os.system(f'start cmd /k py app.py ddos {ip}')
-	def bruteforce_fb(self, email, manual, password):
-		if manual:
-			return os.system(f'start cmd /k py app.py bruteforce:fb {email} --manual {manual}')
-		if password:
-			return os.system(f'start cmd /k py app.py bruteforce:fb {email} --password {password}')
-		else:
-			return os.system(f'start cmd /k py app.py bruteforce:fb {email}')
-	def bruteforce_zip(self, zips, password_list):
-		if password_list:
-			os.system(f'start cmd /k py app.py bruteforce:zip {zips} {password_list}')
-		else:
-			os.system(f'start cmd /k py app.py bruteforce:zip {zips}')
+Window.size = (450, 300)
+sm = ScreenManager()
+screens = []
+action = Action()
 
-class Gui():
-	widget = []
-	def __init__(self):
-		self.action = Action()
-		self.root = Tk()
-		self.style = ttk.Style()
-		self.style.configure('W.TButton', font=('Arial', 8 ))
-		self.style.configure('Run.TButton', bg='#1565C0', font=('Arial', 10 ))
-		self.style.configure('A.TFrame', background=color['secondary'])
-		self.style.configure('TLabel', background=color['secondary'], foreground='white')
-		self.style.configure("Treeview", highlightthickness=0, bd=0, font=('Calibri', 11))
-		self.style.configure("Treeview.Heading", font=('Calibri', 13,'bold'))
-		self.root.configure(bg=color['primary'])
-		self.root.title("HackTools By ferdiansyah0611")
-		self.root.geometry('430x250-5+40')
-		# state
-		self.active = StringVar()
-		self.active.trace('w', self.trace_active)
-		# template
-		self.mainframe = Frame(self.root, bg=color['primary'], padx=12, pady=5, relief="groove", borderwidth=2)
-		self.mainframe.grid(column=0, row=0, sticky=(N, W, E, S))
-		# start
-		self.action_btn()
-		self.bruteforce_fb()
-		self.root.mainloop()
-	def make_frame2(self):
-		self.mainframe2 = ttk.Frame(self.root, padding="12 12 12 12", style='A.TFrame')
-		self.mainframe2.grid(column=2, row=0, sticky=(N, W, E, S))
-	def trace_active(self, a, b, c):
-		active = self.active.get()
-		self.mainframe2.destroy()
-		if active == 'Request':
-			self.request()
-		if active == 'IP Port':
-			self.ip_port()
-		if active == 'IP Check':
-			self.ip_port(True)
-		if active == 'DDOS':
-			self.ddos()
-		if active == 'Bruteforce Facebook':
-			self.bruteforce_fb()
-		if active == 'Bruteforce ZIP':
-			self.bruteforce_zip()
-	def make_empty_row(self, column, row):
-		ttk.Label(self.mainframe2, text='').grid(column=column, row=row)
+def go_home(e):
+    sm.switch_to(screens[0])
 
-	def action_btn(self):
-		def maker(arg):
-			text = arg[0]
-			column = arg[1]
-			row = arg[2]
-			event = lambda x: True
+class BRUTEFORCEFTP(Screen):
+    values = None
+    chooser = None
+    def __init__(self, **kwargs):
+        super(BRUTEFORCEFTP, self).__init__(**kwargs)
+        grid = GridLayout(cols=1, spacing=[1, 3], padding=[10, 10])
+        inputs = BoxLayout()
+        self.host = TextInput(text='192.168.43.1', multiline=False)
+        self.port = TextInput(text='21', multiline=False)
+        self.user = TextInput(text='admin', multiline=False)
+        inputs.add_widget(self.host)
+        inputs.add_widget(self.port)
+        inputs.add_widget(self.user)
+        grid.add_widget(inputs)
 
-			if len(arg) == 4:
-				event = arg[3]
+        action = BoxLayout()
+        def add(instance):
+            if self.chooser:
+                box_file.remove_widget(self.chooser)
+                self.chooser = None
+                return
+            self.chooser = FileChooserListView(
+                filters=[
+                    lambda folder, filename: not filename.endswith('.sys')
+                ]
+            )
+            self.chooser.bind(selection=self.ask_file)
+            box_file.add_widget(self.chooser)
 
-			def action_event():
-				self.active.set(text)
+        box_file = BoxLayout(size_hint=(1, None), height=160)
+        menu = BoxLayout()
+        menu.add_widget(Button(
+            text='Select Password List',
+            size_hint=(0.4, None),
+            height=30,
+            on_press=add
+        ))
+        grid.add_widget(box_file)
+        grid.add_widget(menu)
+        action.add_widget(Button(
+            text='Start',
+            background_color= '#1565C0',
+            size_hint=(0.4, None),
+            height=30,
+            on_press=self.start
+        ))
+        action.add_widget(Button(
+            text='Back',
+            size_hint=(0.4, None),
+            height=30,
+            on_press=go_home,
+            background_color='red'
+        ))
+        grid.add_widget(action)
+        self.add_widget(grid)
+    def start(self, instance):
+        if self.values:
+            action.bruteforce_ftp(self.host.text, self.user.text, self.values, self.port.text)
+        else:
+            action.bruteforce_ftp(self.host.text, self.user.text, None, self.port.text)
 
-			styled = {
-				'bg': '#464646',
-				'foreground': 'white',
-				'activebackground': '#616060',
-				'activeforeground': 'white',
-				'font': ('Arial', 8),
-				'relief': 'ridge'
-			}
-			btn = Button(self.mainframe, text=text, command=action_event, **styled)
-			btn.grid(column=column, row=row, sticky=[N, E, S, W], padx=2, pady=2)
+    def ask_file(self, instance, value):
+        if len(value):
+            self.values = value[0]
 
-		listing = [
-			("Bruteforce Facebook", 0, 1),
-			("Bruteforce ZIP", 0, 2),
-			("DDOS", 0, 3),
-			("IP Check", 0, 4),
-			("IP Port", 0, 5),
-			("Request", 0, 6),
-		]
+class BRUTEFORCEFB(Screen):
+    chooser = None
+    values = None
+    def __init__(self, **kwargs):
+        super(BRUTEFORCEFB, self).__init__(**kwargs)
+        grid = GridLayout(cols=1, spacing=[1, 3], padding=[10, 10])
+        stack = StackLayout()
+        self.email = TextInput(multiline=False, text='@mail.com', size_hint=(None, 1.3), width=215)
+        self.manual = TextInput(multiline=False, text='password (Optional)', size_hint=(None, 1.3), width=215)
+        stack.add_widget(self.email)
+        stack.add_widget(self.manual)
+        grid.add_widget(stack)
 
-		label = Label(self.mainframe, text='Action', bg='#464646', foreground='white')
-		label.grid(column=0, row=0)
-		for btn in listing:
-			maker(btn)
+        action = BoxLayout()
+        def add(instance):
+            if self.chooser:
+                box_file.remove_widget(self.chooser)
+                self.chooser = None
+                return
 
-	def bruteforce_zip(self):
-		self.make_frame2()
-		# state
-		filename_zip = StringVar()
-		filename_list = StringVar()
-		# action
-		def run():
-			self.action.bruteforce_zip(filename_zip.get(), filename_list.get())
-		def password_list():
-			filename_list.set(filedialog.askopenfilename())
-		def zip_action():
-			filename_zip.set(filedialog.askopenfilename())
-		# element
-		Button(self.mainframe2, text='Select ZIP', command=zip_action, background=color['danger'], activebackground=color['danger'], foreground='white', activeforeground='white').grid(column=0, row=1, sticky=[N, E, S, W], padx=5, pady=5)
-		Button(self.mainframe2, text='Select Password List', command=password_list, background=color['danger'], activebackground=color['danger'], foreground='white', activeforeground='white').grid(column=0, row=2, sticky=[N, E, S, W], padx=5, pady=5)
+            self.chooser = FileChooserListView(
+                filters=[
+                    lambda folder, filename: not filename.endswith('.sys')
+                ]
+            )
+            self.chooser.bind(selection=self.ask_file)
+            box_file.add_widget(self.chooser)
 
-		self.make_empty_row(column=1, row=4)
-		self.make_empty_row(column=1, row=5)
-		self.make_empty_row(column=1, row=6)
-		self.make_empty_row(column=1, row=7)
+        box_file = BoxLayout(size_hint=(1, None), height=200)
+        menu = BoxLayout()
+        menu.add_widget(Button(
+            text='Select Password List',
+            size_hint=(0.4, None),
+            height=25,
+            on_press=add
+        ))
+        grid.add_widget(box_file)
+        grid.add_widget(menu)
+        action.add_widget(Button(
+            text='Start',
+            background_color= '#1565C0',
+            size_hint=(0.4, None),
+            height=30,
+            on_press=self.start
+        ))
+        action.add_widget(Button(
+            text='Back',
+            size_hint=(0.4, None),
+            height=30,
+            on_press=go_home,
+            background_color='red'
+        ))
+        grid.add_widget(action)
+        self.add_widget(grid)
+    def start(self, instance):
+        if self.email != '@mail.com':
+            if self.manual.text != 'password (Optional)':
+                return action.bruteforce_fb(self.email.text, self.manual.text)
+            if self.values:
+                return action.bruteforce_fb(self.email.text, None, self.values)
+            else:
+                action.bruteforce_fb(self.email.text)
 
-		Button(self.mainframe2, text='Run', command=run, **style_btn_primary).grid(column=0, row=8, sticky=[N, E, S, W], padx=5, pady=5)
+    def ask_file(self, instance, value):
+        if len(value):
+            self.values = value[0]
 
-	def bruteforce_fb(self):
-		self.make_frame2()
-		# state
-		email = StringVar()
-		manual = StringVar()
-		filename = None
-		# action
-		def run():
-			self.action.bruteforce_fb(email.get(), manual.get(), filename)
-		def password_list():
-			filename = filedialog.askopenfilename()
-		# element
-		ttk.Label(self.mainframe2, text='Email').grid(column=1, row=0, sticky=[N, E, S, W], padx=5)
-		ttk.Entry(self.mainframe2, textvariable=email).grid(column=1, row=1, padx=5)
-		ttk.Label(self.mainframe2, text='Customize Password').grid(column=1, row=2, sticky=[N, E, S, W], padx=5)
-		ttk.Entry(self.mainframe2, textvariable=manual).grid(column=1, row=3, padx=5)
+class BRUTEFORCEZIP(Screen):
+    active_chooser = ''
+    values = dict()
+    chooser = None
+    def __init__(self, **kwargs):
+        super(BRUTEFORCEZIP, self).__init__(**kwargs)
+        grid = GridLayout(cols=1, spacing=[1, 3], padding=[10, 10])
+        action = BoxLayout()
+        def add(instance):
+            self.active_chooser = instance.text
+            if self.chooser:
+                return
+            self.chooser = FileChooserListView(
+                filters=[
+                    lambda folder, filename: not filename.endswith('.sys')
+                ]
+            )
+            self.chooser.bind(selection=self.ask_file)
+            box_file.add_widget(self.chooser)
 
-		ttk.Label(self.mainframe2, text='').grid(column=1, row=4, rowspan=1)
-		ttk.Label(self.mainframe2, text='').grid(column=1, row=5, rowspan=1)
-		ttk.Label(self.mainframe2, text='').grid(column=1, row=6, rowspan=1)
-		ttk.Label(self.mainframe2, text='').grid(column=1, row=7, rowspan=1)
+        box_file = BoxLayout(size_hint=(1, None), height=200)
+        menu = BoxLayout()
+        menu.add_widget(Button(
+            text='Select ZIP',
+            size_hint=(0.4, None),
+            height=30,
+            on_press=add
+        ))
+        menu.add_widget(Button(
+            text='Select Password List',
+            size_hint=(0.4, None),
+            height=30,
+            on_press=add
+        ))
+        grid.add_widget(box_file)
+        grid.add_widget(menu)
+        action.add_widget(Button(
+            text='Start',
+            background_color= '#1565C0',
+            size_hint=(0.4, None),
+            height=30,
+            on_press=self.start
+        ))
+        action.add_widget(Button(
+            text='Back',
+            size_hint=(0.4, None),
+            height=30,
+            on_press=go_home,
+            background_color='red'
+        ))
+        grid.add_widget(action)
+        self.add_widget(grid)
+    def start(self, instance):
+        if 'Select ZIP' in self.values and 'Select Password List' in self.values:
+            action.bruteforce_zip(self.values['Select ZIP'], self.values['Select Password List'])
+        elif self.values['Select ZIP']:
+            action.bruteforce_zip(self.values['Select ZIP'], None)
 
-		Button(self.mainframe2, text='Run', command=run, **style_btn_primary).grid(column=1, row=8, sticky=[N, E, S, W], padx=5, pady=5)
-		btn_select = Button(self.mainframe2, text='Select Password List', command=password_list, background=color['danger'], activebackground=color['danger'], foreground='white', activeforeground='white')
-		btn_select.grid(column=3, row=8, sticky=N, padx=5, pady=5)
+    def ask_file(self, instance, value):
+        if len(value):
+            self.values[self.active_chooser] = value[0]
 
-	def ddos(self):
-		self.make_frame2()
-		# state
-		ip = StringVar()
-		port = IntVar()
-		# action
-		def run():
-			self.action.ddos(ip.get(), port.get())
-		# element
-		ttk.Label(self.mainframe2, text='IP Address').grid(column=1, row=0, sticky=[N, E, S, W], columnspan=2, padx=5)
-		ttk.Entry(self.mainframe2, textvariable=ip).grid(column=1, row=1, columnspan=2, padx=5)
-		ttk.Label(self.mainframe2, text='Port (Optional)').grid(column=1, row=2, sticky=[N, E, S, W], columnspan=2, padx=5)
-		ttk.Entry(self.mainframe2, textvariable=port).grid(column=1, row=3, columnspan=2, padx=5)
+class REQUEST(Screen):
+    def __init__(self, **kwargs):
+        super(REQUEST, self).__init__(**kwargs)
+        grid = GridLayout(cols=2, spacing=[1, 3], padding=[10, 10])
+        label = Label(
+            text='URL',
+            halign="left",
+            valign= 'middle',
+            size_hint=(None, 0.2),
+            width=100
+        )
+        label.text_size = label.size
+        grid.add_widget(label)
+        self.url = TextInput(
+            text='https://',
+            size_hint=(None, 0.5),
+            multiline=False,
+            width=250
+        )
+        grid.add_widget(self.url)
 
-		self.make_empty_row(column=1, row=4)
-		self.make_empty_row(column=1, row=5)
-		self.make_empty_row(column=1, row=6)
-		self.make_empty_row(column=1, row=7)
+        label = Label(
+            text='Data',
+            halign="left",
+            valign= 'middle',
+            size_hint=(None, 0.2),
+        )
+        label.text_size = label.size
+        grid.add_widget(label)
 
-		Button(self.mainframe2, text='Run', command=run, **style_btn_primary).grid(column=1, row=8, columnspan=2, sticky=[N, E, S, W], padx=5, pady=5)
+        self.data = TextInput(
+            text= "{}",
+            size_hint=(None, 1),
+            multiline=True,
+            width=250
+        )
+        grid.add_widget(self.data)
 
-	def ip_port(self, is_ip_check = False):
-		self.make_frame2()
-		# state
-		ip = StringVar()
-		# action
-		def run():
-			if is_ip_check:
-				self.action.ip_check(ip.get())
-			else:
-				self.action.ip_port(ip.get())
-		# element
-		text = 'IP Address'
-		if is_ip_check:
-			text = 'Hostname'
-		ttk.Label(self.mainframe2, text=text).grid(column=1, row=0, sticky=[N, E, S, W], columnspan=2, padx=5)
-		ttk.Entry(self.mainframe2, textvariable=ip).grid(column=1, row=1, columnspan=2, padx=5)
+        label = Label(
+            text='Header',
+            size_hint=(None, 0.2),
+            halign="left",
+            valign= 'middle'
+        )
+        label.text_size = label.size
+        grid.add_widget(label)
 
-		self.make_empty_row(column=1, row=2)
-		self.make_empty_row(column=1, row=3)
-		self.make_empty_row(column=1, row=4)
-		self.make_empty_row(column=1, row=5)
-		self.make_empty_row(column=1, row=6)
-		self.make_empty_row(column=1, row=7)
+        self.header = TextInput(
+            text= "{}",
+            size_hint=(None, 1),
+            multiline=True,
+            width=250
+        )
+        grid.add_widget(self.header)
 
-		Button(self.mainframe2, text='Run', command=run, **style_btn_primary).grid(column=1, row=8, columnspan=2, sticky=[N, E, S, W], padx=5, pady=5)
+        def callback(instance, value):
+            print(value, instance.active)
+            if value:
+                pass
+            else:
+                pass
 
-	def request(self):
-		self.make_frame2()
-		# state
-		url = StringVar()
-		data = StringVar()
-		method = StringVar()
-		header = StringVar()
-		# action
-		def run():
-			self.action.request(url.get(), method.get(), data.get(), header.get())
-		# element
-		ttk.Label(self.mainframe2, text='URL').grid(column=1, row=0, sticky=[N, E, S, W], columnspan=2, padx=5)
-		ttk.Entry(self.mainframe2, textvariable=url).grid(column=1, row=1, columnspan=2, padx=5)
-		ttk.Label(self.mainframe2, text='Methods').grid(column=1, row=2, sticky=[N, E, S, W], columnspan=2, padx=5)
-		
-		first_position = 3
-		for methods in ['Get', 'Post', 'Put', 'Delete']:
-			ttk.Radiobutton(self.mainframe2, text=methods, variable=method, value=methods.lower()).grid(column=1, row=first_position, sticky=[N, E, S, W], columnspan=2, padx=5)
-			first_position += 1
+        box = BoxLayout(width=250)
+        label = Label(
+            text='Methods',
+            size_hint=(None, 0.2),
+            halign="left",
+            valign= 'middle'
+        )
+        label.text_size = label.size
+        grid.add_widget(label)
 
-		ttk.Label(self.mainframe2, text='Data').grid(column=3, row=0, sticky=[N, E, S, W], padx=5)
-		ttk.Entry(self.mainframe2, textvariable=data).grid(column=3, row=1, padx=5)
-		ttk.Label(self.mainframe2, text='Header').grid(column=3, row=2, sticky=[N, E, S, W], padx=5)
-		ttk.Entry(self.mainframe2, textvariable=data).grid(column=3, row=3, padx=5)
-		ttk.Label(self.mainframe2, text='').grid(column=1, row=7, rowspan=1, columnspan=2)
-		Button(self.mainframe2, text='Run', command=run, **style_btn_primary).grid(column=1, row=8, columnspan=2, sticky=[N, E, S, W], padx=5, pady=5)
+        # checkbox.bind(active=callback)
+        checkbox = CheckBox(group='methods')
+        checkbox_2 = CheckBox(group='methods')
+        checkbox_3 = CheckBox(group='methods')
+        checkbox_4 = CheckBox(group='methods')
+        self.checkbox = [checkbox, checkbox_2, checkbox_3, checkbox_4]
+        
+        box.add_widget(checkbox)
+        box.add_widget(Label(
+            text='Get',
+            font_size='12sp'
+        ))
+        box.add_widget(checkbox_2)
+        box.add_widget(Label(
+            text='Post',
+            font_size='12sp'
+        ))
+        box.add_widget(checkbox_3)
+        box.add_widget(Label(
+            text='Delete',
+            font_size='12sp'
+        ))
+        box.add_widget(checkbox_4)
+        box.add_widget(Label(
+            text='Put',
+            font_size='12sp'
+        ))
+
+        grid.add_widget(box)
+
+        action = BoxLayout()
+        action.add_widget(Button(
+            text='Start',
+            background_color= '#1565C0',
+            size_hint=(None, 0.5),
+            on_press=self.start
+        ))
+        action.add_widget(Button(
+            text='Back',
+            size_hint=(None, 0.5),
+            on_press=go_home,
+            background_color='red'
+        ))
+        grid.add_widget(action)
+        self.add_widget(grid)
+    def start(self, instance):
+        method = "get"
+        data = None
+        header = None
+        if self.checkbox[0].active:
+            method = 'get'
+        if self.checkbox[1].active:
+            method = 'post'
+        if self.checkbox[2].active:
+            method = 'put'
+        if self.checkbox[3].active:
+            method = 'delete'
+        if self.data.text != '{}':
+            data = self.data.text
+        if self.header.text != '{}':
+            header = self.header.text
+
+        action.request(self.url.text, method, data, header)
+
+class DDOS(Screen):
+    def __init__(self, **kwargs):
+        super(DDOS, self).__init__(**kwargs)
+        grid = GridLayout(cols=1, spacing=[1, 3], padding=[10, 10])
+        grid.add_widget(Label(
+            text='IP Address',
+            size_hint=(0.4, 0.2)
+        ))
+        self.ip = TextInput(
+            text='127.0.0.1',
+            size_hint=(0.4, 0.5),
+            multiline=False
+        )
+        grid.add_widget(self.ip)
+        grid.add_widget(Label(
+            text='Port (Optional)',
+            size_hint=(0.4, 0.2)
+        ))
+        self.port = TextInput(
+            text='0',
+            size_hint=(0.4, 0.5),
+            multiline=False
+        )
+        grid.add_widget(self.port)
+        action = BoxLayout()
+        action.add_widget(Button(
+            text='Start',
+            background_color= '#1565C0',
+            size_hint=(0.4, 0.3),
+            on_press=self.start
+        ))
+        action.add_widget(Button(
+            text='Back',
+            size_hint=(0.4, 0.3),
+            on_press=go_home,
+            background_color='red'
+        ))
+        grid.add_widget(action)
+        self.add_widget(grid)
+    def start(self, instance):
+        action.ddos(self.ip.text, self.port.text)
+
+class IPPORT(Screen):
+    def __init__(self, **kwargs):
+        super(IPPORT, self).__init__(**kwargs)
+        grid = GridLayout(cols=1, spacing=[1, 3], padding=[10, 10])
+        grid.add_widget(Label(
+            text='IP Address',
+            size_hint=(0.4, 0.2)
+        ))
+        self.ip = TextInput(
+            text='127.0.0.1',
+            size_hint=(0.4, 0.5),
+            multiline=False
+        )
+        grid.add_widget(self.ip)
+        grid.add_widget(Label(text=''))
+        action = BoxLayout()
+        action.add_widget(Button(
+            text='Start',
+            background_color= '#1565C0',
+            size_hint=(0.4, 0.3),
+            on_press=self.start
+        ))
+        action.add_widget(Button(
+            text='Back',
+            size_hint=(0.4, 0.3),
+            on_press=go_home,
+            background_color='red'
+        ))
+        grid.add_widget(action)
+        self.add_widget(grid)
+    def start(self, instance):
+        action.ip_port(self.ip.text)
+
+class IPCHECK(Screen):
+    def __init__(self, **kwargs):
+        super(IPCHECK, self).__init__(**kwargs)
+        grid = GridLayout(cols=1, spacing=[1, 3], padding=[10, 10])
+        grid.add_widget(Label(
+            text='Hostname',
+            size_hint=(0.4, 0.2)
+        ))
+        self.hostname = TextInput(
+            text='google.com',
+            size_hint=(0.4, 0.5),
+            multiline=False
+        )
+        grid.add_widget(self.hostname)
+        grid.add_widget(Label(text=''))
+        action = BoxLayout()
+        action.add_widget(Button(
+            text='Start',
+            background_color= '#1565C0',
+            size_hint=(0.4, 0.3),
+            on_press=self.start
+        ))
+        action.add_widget(Button(
+            text='Back',
+            size_hint=(0.4, 0.3),
+            on_press=go_home,
+            background_color='red'
+        ))
+        grid.add_widget(action)
+        self.add_widget(grid)
+    def start(self, instance):
+        action.ip_check(self.hostname.text)
+
+class HOME(Screen):
+    Bool = BooleanProperty(value=False)
+    def __init__(self, **kwargs):
+        super(HOME, self).__init__(**kwargs)
+        root = ScrollView(size_hint=(1, None), size=(Window.width, Window.height))
+        box = BoxLayout(padding=[10, 10])
+        left = AnchorLayout(anchor_x='left', anchor_y='top')
+        left_21 = BoxLayout(size_hint=(1, 1), orientation='vertical')
+        listing = [
+            ("Bruteforce Facebook"),
+            ("Bruteforce ZIP"),
+            ("Bruteforce FTP"),
+            ("DDOS"),
+            ("IP Check"),
+            ("IP Port"),
+            ("Request"),
+        ]
+        for i in listing:
+            left_21.add_widget(Button(
+                text=i,
+                size_hint= (1, .2),
+                font_size= 11,
+                background_color= '#1565C0',
+                on_press=self.click
+            ))
+
+        left.add_widget(left_21)
+        box.add_widget(left)
+        root.add_widget(box)
+        self.add_widget(root)
+
+    def click(self, a):
+        global screens
+
+        if a.text == 'DDOS':
+            sm.switch_to(screens[1])
+        if a.text == 'IP Port':
+            sm.switch_to(screens[2])
+        if a.text == 'IP Check':
+            sm.switch_to(screens[3])
+        if a.text == 'Request':
+            sm.switch_to(screens[4])
+        if a.text == 'Bruteforce ZIP':
+            sm.switch_to(screens[5])
+        if a.text == 'Bruteforce Facebook':
+            sm.switch_to(screens[6])
+        if a.text == 'Bruteforce FTP':
+            sm.switch_to(screens[7])
+
+class HackByFerdiansyah0611(App):
+    def build(self):
+        global screens
+        screens = [
+            HOME(name='home'),
+            DDOS(name='ddos'),
+            IPPORT(name='ipport'),
+            IPCHECK(name='ipcheck'),
+            REQUEST(name='request'),
+            BRUTEFORCEZIP(name='bruteforcezip'),
+            BRUTEFORCEFB(name='bruteforcefb'),
+            BRUTEFORCEFTP(name='bruteforceftp'),
+        ]
+        for i in screens:
+            sm.add_widget(i)
+        return sm
 
 if __name__ == '__main__':
-	Gui()
+    HackByFerdiansyah0611().run() 
