@@ -23,7 +23,7 @@ def request_action(url, methods, data, header, minimize):
 @click.argument('port', required=False, default=0)
 def ddos_action(ip, port):
 	from src.feature.ddos import DDOS
-	DDOS(ip, int(port), bool(port))
+	DDOS(ip, int(port), bool(port), db)
 
 @cli.command('ip:check', short_help='check ip address')
 @click.argument('hostname')
@@ -48,7 +48,7 @@ def fb_bruteforce_action(email, manual, password):
 @click.argument('password_list', required=False, default='passwords.txt')
 def zip_bruteforce_action(file, password_list):
 	from src.feature.zipper import Zipper
-	Zipper(file, password_list)
+	Zipper(file, password_list, db)
 
 @cli.command('bruteforce:ftp', short_help='ftp bruteforce')
 @click.argument('host')
@@ -67,11 +67,25 @@ def ip_port_action(ip):
 
 @cli.command('db:show', short_help='show the database')
 @click.argument('table')
-@click.option('--page', default=1, help='page of result')
+@click.option('--page', default=0, help='page of result')
 @click.option('--total', default=25, help='total row of result')
 def db_request_action(table, page, total):
-	data = db.get(table.lower(), page, total)
-	print(tabulate(data, headers=['url', 'last_action', 'response']))
+	headers = ['url', 'last_action', 'response']
+	data = db.get(table, page, total)
+	if table == 'ddos':
+		headers = ['ip', 'last_action', 'total_payload']
+	if table == 'facebook':
+		headers = ['email', 'last_action', 'password']
+	if table == 'zip':
+		headers = ['name', 'last_action', 'password']
+
+	print(tabulate(data, headers=headers))
+
+@cli.command('db:delete', short_help='delete the database')
+@click.argument('table')
+@click.argument('id')
+def db_delete_action(table, id):
+	db.delete(table, id)
 
 if __name__ == '__main__': 
 	cli()

@@ -32,9 +32,9 @@ class BRUTEFORCEFTP(Screen):
         super(BRUTEFORCEFTP, self).__init__(**kwargs)
         grid = GridLayout(cols=1, spacing=[1, 3], padding=[10, 10])
         inputs = BoxLayout()
-        self.host = TextInput(text='192.168.43.1', multiline=False)
-        self.port = TextInput(text='21', multiline=False)
-        self.user = TextInput(text='admin', multiline=False)
+        self.host = TextInput(text='192.168.43.1', multiline=False, size_hint=(1, None), height=30)
+        self.port = TextInput(text='21', multiline=False, size_hint=(1, None), height=30)
+        self.user = TextInput(text='admin', multiline=False, size_hint=(1, None), height=30)
         inputs.add_widget(self.host)
         inputs.add_widget(self.port)
         inputs.add_widget(self.user)
@@ -58,8 +58,6 @@ class BRUTEFORCEFTP(Screen):
         menu = BoxLayout()
         menu.add_widget(Button(
             text='Select Password List',
-            size_hint=(0.4, None),
-            height=30,
             on_press=add
         ))
         grid.add_widget(box_file)
@@ -67,14 +65,10 @@ class BRUTEFORCEFTP(Screen):
         action.add_widget(Button(
             text='Start',
             background_color= '#1565C0',
-            size_hint=(0.4, None),
-            height=30,
             on_press=self.start
         ))
         action.add_widget(Button(
             text='Back',
-            size_hint=(0.4, None),
-            height=30,
             on_press=go_home,
             background_color='red'
         ))
@@ -97,8 +91,8 @@ class BRUTEFORCEFB(Screen):
         super(BRUTEFORCEFB, self).__init__(**kwargs)
         grid = GridLayout(cols=1, spacing=[1, 3], padding=[10, 10])
         stack = StackLayout()
-        self.email = TextInput(multiline=False, text='@mail.com', size_hint=(None, 1.3), width=215)
-        self.manual = TextInput(multiline=False, text='password (Optional)', size_hint=(None, 1.3), width=215)
+        self.email = TextInput(multiline=False, text='@mail.com', size_hint=(None, None), width=215, height=30)
+        self.manual = TextInput(multiline=False, text='password (Optional)', size_hint=(None, None), width=215, height=30)
         stack.add_widget(self.email)
         stack.add_widget(self.manual)
         grid.add_widget(stack)
@@ -118,12 +112,12 @@ class BRUTEFORCEFB(Screen):
             self.chooser.bind(selection=self.ask_file)
             box_file.add_widget(self.chooser)
 
-        box_file = BoxLayout(size_hint=(1, None), height=200)
+        box_file = BoxLayout(size_hint=(1, None), height=160)
         menu = BoxLayout()
         menu.add_widget(Button(
             text='Select Password List',
-            size_hint=(0.4, None),
-            height=25,
+            size_hint_y=None,
+            height=30,
             on_press=add
         ))
         grid.add_widget(box_file)
@@ -131,13 +125,13 @@ class BRUTEFORCEFB(Screen):
         action.add_widget(Button(
             text='Start',
             background_color= '#1565C0',
-            size_hint=(0.4, None),
+            size_hint_y=None,
             height=30,
             on_press=self.start
         ))
         action.add_widget(Button(
             text='Back',
-            size_hint=(0.4, None),
+            size_hint_y=None,
             height=30,
             on_press=go_home,
             background_color='red'
@@ -236,7 +230,7 @@ class REQUEST(Screen):
             text='https://',
             size_hint=(None, 0.5),
             multiline=False,
-            width=250
+            width=300
         )
         grid.add_widget(self.url)
 
@@ -253,7 +247,7 @@ class REQUEST(Screen):
             text= "{}",
             size_hint=(None, 1),
             multiline=True,
-            width=250
+            width=300
         )
         grid.add_widget(self.data)
 
@@ -270,7 +264,7 @@ class REQUEST(Screen):
             text= "{}",
             size_hint=(None, 1),
             multiline=True,
-            width=250
+            width=300
         )
         grid.add_widget(self.header)
 
@@ -468,9 +462,8 @@ class HOME(Screen):
     def __init__(self, **kwargs):
         super(HOME, self).__init__(**kwargs)
         root = ScrollView(size_hint=(1, None), size=(Window.width, Window.height))
-        box = BoxLayout(padding=[10, 10])
-        left = AnchorLayout(anchor_x='left', anchor_y='top')
-        left_21 = BoxLayout(size_hint=(1, 1), orientation='vertical')
+        box = GridLayout(cols=1,padding=[10, 10],size_hint_y=None)
+        box.bind(minimum_height=box.setter('height'))
         listing = [
             ("Bruteforce Facebook"),
             ("Bruteforce ZIP"),
@@ -481,16 +474,14 @@ class HOME(Screen):
             ("Request"),
         ]
         for i in listing:
-            left_21.add_widget(Button(
+            box.add_widget(Button(
                 text=i,
-                size_hint= (1, .2),
+                size_hint_y=None, height=40,
                 font_size= 11,
                 background_color= '#1565C0',
                 on_press=self.click
             ))
 
-        left.add_widget(left_21)
-        box.add_widget(left)
         root.add_widget(box)
         self.add_widget(root)
 

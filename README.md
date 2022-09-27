@@ -1,6 +1,6 @@
 # Probable Pancake
 
-Tools for hacking. CLI or GUI using kivy
+Tools for hacking. Build with python, kivy, sqlite3
 
 ## Feature
 
@@ -11,6 +11,7 @@ Tools for hacking. CLI or GUI using kivy
 - DDOS Server
 - Check IP Server
 - Check Open Port Server
+- Auto Save To Database
 
 ## Installation
 

@@ -1,7 +1,7 @@
 from tqdm import tqdm
 import zipfile
 
-def Zipper(name, password):
+def Zipper(name, password, db):
 	count_pass = len(list(open(password, "rb")))
 	is_found = False
 	try:
@@ -17,9 +17,11 @@ def Zipper(name, password):
 				except:
 					continue
 				else:
+					pw = word.decode().strip()
 					print("\a")
-					print("Password Found:", word.decode().strip())
+					print("Password Found:", pw)
 					is_found = True
+					db.add_zip({'name': name, 'password': pw})
 					break
 		if is_found == False:
 			print("Password not found in the wordlist, try another one")
